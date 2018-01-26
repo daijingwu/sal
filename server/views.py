@@ -2025,9 +2025,12 @@ def checkin(request):
         machine.os_family = report_data['OSFamily']
 
     if not machine.machine_model_friendly:
-        try:
-            machine.machine_model_friendly = utils.friendly_machine_model(machine)
-        except:
+        if machine.os_family == 'Darwin':
+            try:
+                machine.machine_model_friendly = utils.friendly_machine_model(machine)
+            except:
+                machine.machine_model_friendly = machine.machine_model
+        else:
             machine.machine_model_friendly = machine.machine_model
 
     if deployed_on_checkin is True:
